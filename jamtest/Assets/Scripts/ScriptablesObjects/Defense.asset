@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744f1e0625c1c0d4184e8dd0f988741d, type: 3}
   m_Name: Defense
   m_EditorClassIdentifier: 
-  cardAsset: {fileID: 0}
+  cardAsset: {fileID: 21300000, guid: 445e4f3ba1e6d864e99469bb5a34c4aa, type: 3}
   cardType: 1

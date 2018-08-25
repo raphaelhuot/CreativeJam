@@ -67,8 +67,7 @@ public class CardDataHolder : MonoBehaviour {
         float elapsedTime = .0f;
         while (elapsedTime < duration && flip < 180)
         {
-            flip+=2;
-            Debug.Log(flip); 
+            flip+=2.5f; 
             if (flip == 90)
             {
                 sprite.sprite = cardSprite;
