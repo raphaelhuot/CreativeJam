@@ -7,6 +7,7 @@ public class CardHolder : MonoBehaviour {
     public CardList cardList;
     public GameObject card;
     public InputController controller;
+    public PlayersState playersState; 
 
     public int xBoardSize;
     public int yBoardSize; 
@@ -15,7 +16,8 @@ public class CardHolder : MonoBehaviour {
 
     private void Start()
     {
-        controller = GetComponent<InputController>(); 
+        controller = GetComponent<InputController>();
+        playersState = GetComponent<PlayersState>(); 
         GenerateCards();
     }
 
@@ -30,6 +32,7 @@ public class CardHolder : MonoBehaviour {
             cardData.cardSprite = cardList.cardList[i].cardAsset;
             controller.cards.Add(cardData); 
         }
+        playersState.InitializeCards(); 
     }
 
 }

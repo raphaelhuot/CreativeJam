@@ -120,6 +120,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114014190148703008, guid: f5fa5be3b86280b41857beeb193c1577,
+        type: 2}
+      propertyPath: cards.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 114054597730560930, guid: f5fa5be3b86280b41857beeb193c1577,
         type: 2}
       propertyPath: cardPosition.Array.size
@@ -442,6 +447,16 @@ Prefab:
       propertyPath: cardPosition.Array.data[35].x
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114457658713856916, guid: f5fa5be3b86280b41857beeb193c1577,
+        type: 2}
+      propertyPath: playerBaseHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114457658713856916, guid: f5fa5be3b86280b41857beeb193c1577,
+        type: 2}
+      propertyPath: beginningTimer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5fa5be3b86280b41857beeb193c1577, type: 2}
   m_IsPrefabAsset: 0
@@ -522,3 +537,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1464642998 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1752607025169582, guid: f5fa5be3b86280b41857beeb193c1577,
+    type: 2}
+  m_PrefabInternal: {fileID: 415709207}
+--- !u!114 &1464642999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1464642998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b20bc0ee52774a4f938d6dbac135d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 3
+  attackDamage: 15
+  VampirismDamage: 10

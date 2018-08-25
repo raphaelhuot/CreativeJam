@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744f1e0625c1c0d4184e8dd0f988741d, type: 3}
   m_Name: Vampire
   m_EditorClassIdentifier: 
-  cardAsset: {fileID: 21300000, guid: 72cfb560c8e3d374f9eb0fee1814ac0e, type: 3}
+  cardAsset: {fileID: 21300000, guid: cb1c4acc92d04b54392974dab6dea4f2, type: 3}
   cardType: 3

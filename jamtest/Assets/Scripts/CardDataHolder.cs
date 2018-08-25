@@ -56,8 +56,8 @@ public class CardDataHolder : MonoBehaviour {
                 sprite.color = hoveringCardColor; 
                 break;
             case CardState.Selected:
-                //sprite.color = selectedCardColor;
-                StartCoroutine(flipCard(10f, 0f)); 
+                sprite.color = baseCardColor; 
+                StartCoroutine(FlipCard(10f, 0f)); 
                 break;
             case CardState.Used:
                 sprite.sprite = cardSprite; 
@@ -67,14 +67,14 @@ public class CardDataHolder : MonoBehaviour {
         }
     }
 
-    public IEnumerator flipCard(float duration, float flip)
+    public IEnumerator FlipCard(float duration, float flip)
     {
         float elapsedTime = .0f;
         while (elapsedTime < duration && flip < 180)
         {
             isCrRunning = true;
             flip +=3f; 
-            if (flip == 90)
+            if (flip > 90)
             {
                 sprite.sprite = cardSprite;
             }
@@ -86,14 +86,14 @@ public class CardDataHolder : MonoBehaviour {
         controller.CheckForCards(); 
     }
 
-    public IEnumerator flipCardBack(float duration, float flip)
+    public IEnumerator FlipCardBack(float duration, float flip)
     {
         float elapsedTime = .0f;
         while (elapsedTime < duration && flip > 0)
         {
             isCrRunning = true;
             flip -= 2f;
-            if (flip == 90)
+            if (flip < 90)
             {
                 sprite.sprite = cardBack;
             }

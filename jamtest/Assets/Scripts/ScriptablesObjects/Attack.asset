@@ -11,5 +11,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744f1e0625c1c0d4184e8dd0f988741d, type: 3}
   m_Name: Attack
   m_EditorClassIdentifier: 
-  cardAsset: {fileID: 21300000, guid: 053b49688d36348419697b41ced9bec3, type: 3}
+  cardAsset: {fileID: 21300000, guid: d37c7ed8d886f2645894b0e37816faae, type: 3}
   cardType: 0

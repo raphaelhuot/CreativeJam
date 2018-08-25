@@ -4,41 +4,47 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour {
 
-    public PlayersState players; 
+    public PlayersState players;
+    public ActionManager action; 
     public LayerMask cardLayer;
     public List<CardDataHolder> selectedCards = new List<CardDataHolder>();
     public List<CardDataHolder> cards = new List<CardDataHolder>(); 
 
 	// Use this for initialization
-	void Start () {
-        players = GetComponent<PlayersState>(); 
+	void Start ()
+    {
+        players = GetComponent<PlayersState>();
+        action = GetComponent<ActionManager>();
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
     {
-        SelectCard();
-
-        RaycastHit hitInfo;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        bool hit = Physics.Raycast(ray, out hitInfo, cardLayer); 
-        if (hit)
+        if (players.canPlay)
         {
-            CardDataHolder card = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
-            if (card.cardState == CardDataHolder.CardState.Hidden)
+            SelectCard();
+
+            RaycastHit hitInfo;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            bool hit = Physics.Raycast(ray, out hitInfo, cardLayer);
+            if (hit)
             {
-                card.cardState = CardDataHolder.CardState.Hovered; 
-                card.UpdateSprite();
-                for (int i = 0; i < cards.Count; i++)
+                CardDataHolder card = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
+                if (card.cardState == CardDataHolder.CardState.Hidden)
                 {
-                    if (cards[i] != card)
+                    card.cardState = CardDataHolder.CardState.Hovered;
+                    card.UpdateSprite();
+                    for (int i = 0; i < cards.Count; i++)
                     {
-                        if (cards[i].cardState != CardDataHolder.CardState.Selected)
+                        if (cards[i] != card)
                         {
-                            if (cards[i].cardState != CardDataHolder.CardState.Used)
+                            if (cards[i].cardState != CardDataHolder.CardState.Selected)
                             {
-                                cards[i].cardState = CardDataHolder.CardState.Hidden;
-                                cards[i].UpdateSprite();
+                                if (cards[i].cardState != CardDataHolder.CardState.Used)
+                                {
+                                    cards[i].cardState = CardDataHolder.CardState.Hidden;
+                                    cards[i].UpdateSprite();
+                                }
                             }
                         }
                     }
@@ -94,11 +100,13 @@ public class InputController : MonoBehaviour {
             if (selectedCards[0].type == selectedCards[1].type)
             {
                 Debug.Log("Pair");
+                action.CheckCardAction(selectedCards[0].type);
                 ResetPair(true);
             }
             else
             {
                 Debug.Log("Wrong Pair");
+                players.SwitchPlayer(); 
                 ResetPair(false); 
             }
         }
@@ -115,7 +123,7 @@ public class InputController : MonoBehaviour {
             }
             else
             {
-                StartCoroutine(selectedCards[i].flipCardBack(2f, 180f));
+                StartCoroutine(selectedCards[i].FlipCardBack(2f, 180f));
             }
         }
 
