@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour {
 
+    public PlayersState players; 
     public LayerMask cardLayer;
     public List<CardDataHolder> selectedCards = new List<CardDataHolder>();
     public List<CardDataHolder> cards = new List<CardDataHolder>(); 
 
 	// Use this for initialization
 	void Start () {
-		
+        players = GetComponent<PlayersState>(); 
 	}
 	
 	// Update is called once per frame
@@ -24,7 +25,7 @@ public class InputController : MonoBehaviour {
         if (hit)
         {
             CardDataHolder card = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
-            if (card.cardState != CardDataHolder.CardState.Selected)
+            if (card.cardState == CardDataHolder.CardState.Hidden)
             {
                 card.cardState = CardDataHolder.CardState.Hovered; 
                 card.UpdateSprite();
@@ -32,8 +33,14 @@ public class InputController : MonoBehaviour {
                 {
                     if (cards[i] != card)
                     {
-                        cards[i].cardState = CardDataHolder.CardState.Hidden;
-                        cards[i].UpdateSprite();
+                        if (cards[i].cardState != CardDataHolder.CardState.Selected)
+                        {
+                            if (cards[i].cardState != CardDataHolder.CardState.Used)
+                            {
+                                cards[i].cardState = CardDataHolder.CardState.Hidden;
+                                cards[i].UpdateSprite();
+                            }
+                        }
                     }
                 }
             }
@@ -44,28 +51,74 @@ public class InputController : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hitInfo;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            bool hit = Physics.Raycast(ray, out hitInfo, cardLayer);
-            if (hit)
+            bool allfalse = true; 
+            foreach (CardDataHolder card in cards)
             {
-                CardDataHolder currentCard = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
-                currentCard.isHovered = false;
-                currentCard.isSelected = true;
-                currentCard.cardState = CardDataHolder.CardState.Selected;
-                currentCard.UpdateSprite();
-                selectedCards.Add(currentCard);
-
-                if (selectedCards.Count > 1)
+                bool b = card.isCrRunning; 
+                if (b)
                 {
-                    selectedCards[selectedCards.Count-1].isSelected = false;
+                    allfalse = false; 
+                    break; 
                 }
-                for (int i = 0; i < selectedCards.Count; i++)
+            }
+            if (allfalse)
+            {
+                RaycastHit hitInfo;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                bool hit = Physics.Raycast(ray, out hitInfo, cardLayer);
+                if (hit)
                 {
-                    selectedCards[i].UpdateSprite();
+                    CardDataHolder currentCard = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
+                    if (currentCard.cardState == CardDataHolder.CardState.Hovered)
+                    {
+                        currentCard.isHovered = false;
+                        currentCard.isSelected = true;
+                        currentCard.cardState = CardDataHolder.CardState.Selected;
+                        currentCard.UpdateSprite();
+                        selectedCards.Add(currentCard);
+                    }
+
+                    for (int i = 0; i < selectedCards.Count; i++)
+                    {
+                        //selectedCards[i].UpdateSprite();
+                    }
                 }
             }
         }
     }
 
+    public void CheckForCards()
+    {
+        if (selectedCards.Count == 2)
+        {
+            if (selectedCards[0].type == selectedCards[1].type)
+            {
+                Debug.Log("Pair");
+                ResetPair(true);
+            }
+            else
+            {
+                Debug.Log("Wrong Pair");
+                ResetPair(false); 
+            }
+        }
+    }
+
+    private void ResetPair(bool isPaired)
+    {
+        for (int i = 0; i < selectedCards.Count; i++)
+        {
+            if (isPaired)
+            {
+                selectedCards[i].cardState = CardDataHolder.CardState.Used;
+                selectedCards[i].UpdateSprite(); 
+            }
+            else
+            {
+                StartCoroutine(selectedCards[i].flipCardBack(2f, 180f));
+            }
+        }
+
+        selectedCards.Clear();
+    }
 }

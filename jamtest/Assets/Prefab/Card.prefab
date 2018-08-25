@@ -71,10 +71,11 @@ MonoBehaviour:
   isHidden: 0
   isSelected: 0
   isHovered: 0
+  isCrRunning: 0
   selectedCardColor: {r: 0.9622642, g: 0.11739557, b: 0.05900679, a: 1}
   baseCardColor: {r: 1, g: 1, b: 1, a: 1}
   hoveringCardColor: {r: 1, g: 0.89767873, b: 0, a: 1}
-  usedCardColor: {r: 0, g: 0, b: 0, a: 0}
+  usedCardColor: {r: 0, g: 0, b: 0, a: 0.49019608}
   cardState: 0
 --- !u!212 &212517748307949472
 SpriteRenderer:

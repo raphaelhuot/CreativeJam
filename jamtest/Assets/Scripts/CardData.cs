@@ -7,5 +7,5 @@ public class CardData : ScriptableObject
 {
     public Sprite cardAsset;
     public CardType cardType; 
-    public enum CardType {attack, defense, health, mana};
+    public enum CardType {attack, defense, locker, vampire, timer};
 }

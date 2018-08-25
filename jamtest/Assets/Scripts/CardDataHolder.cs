@@ -5,7 +5,8 @@ using UnityEngine;
 public class CardDataHolder : MonoBehaviour {
 
     //Components
-    SpriteRenderer sprite; 
+    SpriteRenderer sprite;
+    InputController controller; 
 
     //Data
     public Sprite cardBack;
@@ -16,6 +17,7 @@ public class CardDataHolder : MonoBehaviour {
     public bool isHidden;
     public bool isSelected;
     public bool isHovered;
+    public bool isCrRunning; 
     public Color selectedCardColor;
     public Color baseCardColor;
     public Color hoveringCardColor;
@@ -25,11 +27,13 @@ public class CardDataHolder : MonoBehaviour {
 
     private void Awake()
     {
-        sprite = GetComponent<SpriteRenderer>(); 
+        sprite = GetComponent<SpriteRenderer>();
+        controller = FindObjectOfType<InputController>(); 
     }
 
     private void Start()
     {
+        isCrRunning = false; 
         cardState = CardState.Hidden; 
         UpdateSprite(); 
     }
@@ -57,7 +61,8 @@ public class CardDataHolder : MonoBehaviour {
                 break;
             case CardState.Used:
                 sprite.sprite = cardSprite; 
-                sprite.color = usedCardColor; 
+                sprite.color = usedCardColor;
+                gameObject.layer = 2; 
                 break; 
         }
     }
@@ -67,7 +72,8 @@ public class CardDataHolder : MonoBehaviour {
         float elapsedTime = .0f;
         while (elapsedTime < duration && flip < 180)
         {
-            flip+=2.5f; 
+            isCrRunning = true;
+            flip +=3f; 
             if (flip == 90)
             {
                 sprite.sprite = cardSprite;
@@ -75,7 +81,29 @@ public class CardDataHolder : MonoBehaviour {
             Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, flip, 0f));
             transform.rotation = targetRotation;  
             yield return new WaitForEndOfFrame();
+            isCrRunning = false; 
         }
+        controller.CheckForCards(); 
+    }
+
+    public IEnumerator flipCardBack(float duration, float flip)
+    {
+        float elapsedTime = .0f;
+        while (elapsedTime < duration && flip > 0)
+        {
+            isCrRunning = true;
+            flip -= 2f;
+            if (flip == 90)
+            {
+                sprite.sprite = cardBack;
+            }
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, flip, 0f));
+            transform.rotation = targetRotation;
+            yield return new WaitForEndOfFrame();
+            isCrRunning = false; 
+        }
+        cardState = CardState.Hidden;
+        UpdateSprite(); 
     }
 }
 
