@@ -24,14 +24,17 @@ public class InputController : MonoBehaviour {
         if (hit)
         {
             CardDataHolder card = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
-            card.isHovered = true;
-            card.UpdateSprite();
-            for (int i = 0; i < cards.Count; i++)
+            if (card.cardState != CardDataHolder.CardState.Selected)
             {
-                if (cards[i] != card)
+                card.cardState = CardDataHolder.CardState.Hovered; 
+                card.UpdateSprite();
+                for (int i = 0; i < cards.Count; i++)
                 {
-                    cards[i].isHovered = false;
-                    cards[i].UpdateSprite(); 
+                    if (cards[i] != card)
+                    {
+                        cards[i].cardState = CardDataHolder.CardState.Hidden;
+                        cards[i].UpdateSprite();
+                    }
                 }
             }
         }
@@ -46,23 +49,16 @@ public class InputController : MonoBehaviour {
             bool hit = Physics.Raycast(ray, out hitInfo, cardLayer);
             if (hit)
             {
-                Debug.Log("hit");
-                if (hitInfo.transform.gameObject.GetComponent<CardDataHolder>().isHovered == true)
-                {
-                    CardDataHolder currentCard = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
-                    currentCard.isHovered = false; 
-                    currentCard.isSelected = true;
-                    currentCard.UpdateSprite(); 
-                    selectedCards.Add(currentCard); 
+                CardDataHolder currentCard = hitInfo.transform.gameObject.GetComponent<CardDataHolder>();
+                currentCard.isHovered = false;
+                currentCard.isSelected = true;
+                currentCard.cardState = CardDataHolder.CardState.Selected;
+                currentCard.UpdateSprite();
+                selectedCards.Add(currentCard);
 
-                }
                 if (selectedCards.Count > 1)
                 {
-                    selectedCards[0].isSelected = false;
-                    if (selectedCards.Count > 2)
-                    {
-                        selectedCards.Remove(selectedCards[0]);
-                    }
+                    selectedCards[selectedCards.Count-1].isSelected = false;
                 }
                 for (int i = 0; i < selectedCards.Count; i++)
                 {

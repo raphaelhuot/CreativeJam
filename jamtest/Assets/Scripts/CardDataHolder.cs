@@ -4,22 +4,34 @@ using UnityEngine;
 
 public class CardDataHolder : MonoBehaviour {
 
-    public Sprite cardBack; 
+    //Components
+    SpriteRenderer sprite; 
+
+    //Data
+    public Sprite cardBack;
     public Sprite cardSprite;
     public CardData.CardType type;
 
     //Card States
     public bool isHidden;
     public bool isSelected;
-    public bool isHovered; 
+    public bool isHovered;
     public Color selectedCardColor;
     public Color baseCardColor;
-    public Color hoveringCardColor; 
+    public Color hoveringCardColor;
+    public Color usedCardColor; 
+    public CardState cardState;
+    public enum CardState {Hovered, Selected, Hidden, Used}
+
+    private void Awake()
+    {
+        sprite = GetComponent<SpriteRenderer>(); 
+    }
 
     private void Start()
     {
-        isHidden = true;
-        isSelected = false; 
+        cardState = CardState.Hidden; 
+        UpdateSprite(); 
     }
 
     private void Update()
@@ -29,36 +41,42 @@ public class CardDataHolder : MonoBehaviour {
 
     public void UpdateSprite()
     {
-        if (isHidden)
+        Debug.Log(cardState); 
+        switch (cardState)
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = cardBack; 
-        }
-        else if (!isHidden)
-        {
-            gameObject.GetComponent<SpriteRenderer>().sprite = cardSprite;
-        }
-
-        if (isSelected)
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = selectedCardColor;
-            isHovered = false; 
-
-        }
-        else if (!isSelected)
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = baseCardColor; 
-        }
-
-        if (isHovered)
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = hoveringCardColor;
-
-        }
-        else if (!isHovered)
-        {
-            gameObject.GetComponent<SpriteRenderer>().color = baseCardColor;
+            case CardState.Hidden:
+                sprite.sprite = cardBack;
+                sprite.color = baseCardColor; 
+                break;
+            case CardState.Hovered:
+                sprite.color = hoveringCardColor; 
+                break;
+            case CardState.Selected:
+                //sprite.color = selectedCardColor;
+                StartCoroutine(flipCard(10f, 0f)); 
+                break;
+            case CardState.Used:
+                sprite.sprite = cardSprite; 
+                sprite.color = usedCardColor; 
+                break; 
         }
     }
 
+    public IEnumerator flipCard(float duration, float flip)
+    {
+        float elapsedTime = .0f;
+        while (elapsedTime < duration && flip < 180)
+        {
+            flip+=2;
+            Debug.Log(flip); 
+            if (flip == 90)
+            {
+                sprite.sprite = cardSprite;
+            }
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(0f, flip, 0f));
+            transform.rotation = targetRotation;  
+            yield return new WaitForEndOfFrame();
+        }
+    }
 }
 
